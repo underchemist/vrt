@@ -55,7 +55,8 @@ class VRTWriter:
                 for domain in dataset.GetMetadataDomainList()
             }
         if not dataset:
-            if not any((xsize, ysize, (geotransform or gcps)))
+            if not any((xsize, ysize, (geotransform or gcps))):
+                raise TypeError("")
             if not metadata:
                 metadata = {"": dict()}
 
