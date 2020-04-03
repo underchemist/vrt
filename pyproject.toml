@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "vrt-writer"
+version = "0.1.0"
+description = "Library for easily building and writing GDAL VRT datasets."
+authors = ["Yann-Sebastien Tremblay-Johnston <yanns.tremblay@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+gdal = {version = ">=2.2.4"}
+xmlschema = "^1.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.1"
+black = "^19.10b0"
+
+[tool.pytest]
+filterwarnings = "ignore::DeprecationWarning"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+

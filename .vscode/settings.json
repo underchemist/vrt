@@ -1,0 +1,5 @@
+{
+    "python.formatting.provider": "black",
+    "python.pythonPath": "C:\\Users\\yanns\\Miniconda3\\envs\\vrt_writer\\python.exe",
+    "editor.formatOnSave": true
+}

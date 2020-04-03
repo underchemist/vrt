@@ -1,0 +1,3 @@
+[virtualenvs]
+create = false
+path = "C:\\Users\\yanns\\Miniconda3\\envs"
