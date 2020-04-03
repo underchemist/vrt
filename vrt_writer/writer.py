@@ -3,6 +3,7 @@ import pickle
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Sequence
+from xml.sax.saxutils import escape
 
 import xmlschema
 
@@ -34,43 +35,28 @@ def get_vrt_schema():
 
 
 class VRTWriter:
+    schema = get_vrt_schema()
+    DATASET_SUBCLASSES = ("VRTWarpedDataset", "VRTPansharpenedDataset")
+
     def __init__(self):
-        self.vrt = ET.Element("VRTDataset")
+        self.vrt = dict()
 
-    def add_dataset(
-        self,
-        dataset=None,
-        xsize=None,
-        ysize=None,
-        geotransform=None,
-        gcps=None,
-        metadata=None,
-    ):
-        if dataset:
-            xsize = dataset.RasterXSize
-            ysize = dataset.RasterYSize
-            geotransform = dataset.GetGeoTransform()
-            metadata = {
-                domain: dataset.GetMetadata(domain)
-                for domain in dataset.GetMetadataDomainList()
-            }
-        if not dataset:
-            if not any((xsize, ysize, (geotransform or gcps))):
-                raise TypeError("")
-            if not metadata:
-                metadata = {"": dict()}
+    def add_vrtdataset(self, xsize, ysize, subclass=None):
+        if subclass is not None and subclass not in self.DATASET_SUBCLASSES:
+            raise ValueError(f"Invalid subclass {subclass} for VRTDataset element.")
 
-        # serialize
-        xsize = str(xsize)
-        ysize = str(ysize)
-        geotransform = ",".join(map(str, geotransform))
-        gcps
+        self.update_element(
+            "VRTDataset",
+            {"@rasterXSize": xsize, "@rasterYSize": ysize},
+            {"@subClass": subclass},
+        )
 
-        self.vrt.attrib["RasterXSize"] = xsize
+    def add_SRS(self, srs=None, wkt=None, user_input=None):
+        pass
 
     def to_string(self):
         """Return a string representation of VRTDataset."""
-        return ET.tostring(self.vrt).decode()
+        return ET.tostring(self.schema.encode(self.vrt))
 
     def to_file(self, path):
         """Write VRTDataset to file.
@@ -80,8 +66,34 @@ class VRTWriter:
         """
         path = Path(path)
         with path.open("wb") as f:
-            f.write(ET.tostring(self.vrt))
+            f.write(self.to_string())
+
+    def update_element(self, element, mapping, optional_mapping=None):
+        """Update element of `vrt` corresponding to a valid VRT xml element.
+
+        Args:
+            element (str): Name of VRT element to update.
+            mapping (dict): A dict containing required attributes and subelements of `element`.
+            optional_mapping (dict): A dict containing optional attributes of `element`.
+                Any key-value pairs will be added to the `element` provided the value is not
+                None.
+        """
+        if optional_mapping:
+            optional_mapping = {
+                key: value for key, value in optional_mapping.items() if value
+            }
+
+        d = {**mapping, **optional_mapping}
+
+        if element == "VRTDataset":
+            self.vrt.update(d)
+        else:
+            self.vrt.update(element=d)
+
+    @property
+    def is_valid(self):
+        return self.schema.is_valid(self.schema.encode(self.vrt))
 
     def clear(self):
         """Clear VRTDataset contents."""
-        self.vrt = ET.Element("VRTDataset")
+        self.vrt = dict()

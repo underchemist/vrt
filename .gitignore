@@ -144,3 +144,6 @@ static
 
 # poetry
 poetry.lock
+
+# vscode
+.vscode/
