@@ -72,6 +72,7 @@
             <xs:element name="GCP" type="GCPType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="Projection" type="xs:string"/>
+        <xs:attribute name="dataAxisToSRSAxisMapping" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="GCPType">
@@ -169,7 +170,7 @@
                 <xs:element name="Histograms" type="HistogramsType"/>
 
                 <!-- for a VRTSourcedRasterBand. Each element may be repeated -->
-                <xs:element name="SimpleSource" type="SimpleSourceType"/>
+                <xs:element name="SimpleSource" type="SimpleSourceType"/> 
                 <xs:element name="ComplexSource" type="ComplexSourceType"/>
                 <xs:element name="AveragedSource" type="SimpleSourceType"/>
                 <xs:element name="KernelFilteredSource" type="KernelFilteredSourceType"/>
