@@ -89,8 +89,8 @@
     <xs:complexType name="MetadataType">
         <xs:sequence>
             <!--<xs:choice>-->
-                <!--<xs:element name="MDI" type="MDIType" minOccurs="0" maxOccurs="unbounded"/>-->
-                <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="MDI" type="MDIType" minOccurs="0" maxOccurs="unbounded"/>
+                <!-- <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/> -->
             <!--</xs:choice>-->
         </xs:sequence>
         <xs:attribute name="domain" type="xs:string"/>
@@ -170,7 +170,7 @@
                 <xs:element name="Histograms" type="HistogramsType"/>
 
                 <!-- for a VRTSourcedRasterBand. Each element may be repeated -->
-                <xs:element name="SimpleSource" type="SimpleSourceType"/> 
+                <xs:element name="SimpleSource" type="SimpleSourceType"/>
                 <xs:element name="ComplexSource" type="ComplexSourceType"/>
                 <xs:element name="AveragedSource" type="SimpleSourceType"/>
                 <xs:element name="KernelFilteredSource" type="KernelFilteredSourceType"/>

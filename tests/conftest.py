@@ -1,4 +1,4 @@
-from osgeo import gdal
+from osgeo import gdal, osr
 import uuid
 
 
@@ -10,3 +10,10 @@ def create_tif(xsize=8, ysize=8, count=1, dtype=None):
     src.FlushCache()
 
     return src
+
+
+def create_srs(epsg=4326):
+    srs = osr.SpatialReference()
+    srs.ImportFromEPSG(epsg)
+
+    return srs
